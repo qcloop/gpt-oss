@@ -11,7 +11,7 @@ parser.add_argument('model', metavar='PATH', type=str, help='Path to gpt-oss che
 parser.add_argument('-p', '--prompt', type=str, required=True, help='Prompt')
 parser.add_argument('-l', '--limit', type=int, default=100, help='Number of tokens to generate')
 parser.add_argument('--context-length', type=int, default=0, help='The maximum context length')
-
+parser.add_argument('--max-output-tokens', type=int, default=1000, help='The maximum context length')
 
 def main(args):
     options = parser.parse_args(args)
@@ -25,7 +25,7 @@ def main(args):
     tokenizer = model.tokenizer
 
     while context.num_tokens - prompt_tokens < options.limit:
-        token = context.sample()
+        token = context.sample(max_output_tokens=options.max_output_tokens)
         context.append(token)
         print(str(tokenizer.decode(token), encoding="utf-8"), end='', flush=True)
 
